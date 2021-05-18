@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "9ca2c87f-46af-4610-9266-2332a70dc340",
+		"name": "Testes Avenue",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Princing",
+			"item": [
+				{
+					"name": "Consulta dos preços USD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Requisição efetuada com sucesso\", () => {\r",
+									"  pm.expect(pm.response.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Json deve possuir a valor em USD\", () => {\r",
+									"  pm.expect(pm.response.json().data.currencyConversion[0].code).to.eql(\"USD\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"query\": \"query PlansList($amounts: [Int!]!) {\\n  ...CurrencyConversion\\n}\\nfragment CurrencyConversion on Query {\\n  currencyCode\\n  currencyConversion(amounts: $amounts, currencies: [USD]) {\\n    code\\n    formattedAmounts\\n  }\\n}\\n\",\r\n    \"variables\": {\r\n        \"amounts\": [\r\n            7500,\r\n            13500\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://dashboard.cypress.io/graphql"
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta dos preços sem USD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Requisição efetuada com sucesso\", () => {\r",
+									"  pm.expect(pm.response.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Json não deve possuir valor em USD\", () => {\r",
+									"  pm.expect(pm.response.json().data.currencyConversion[0].code).not.to.eql(\"USD\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"query\": \"query PlansList($amounts: [Int!]!) {\\n  ...CurrencyConversion\\n}\\nfragment CurrencyConversion on Query {\\n  currencyCode\\n  currencyConversion(amounts: $amounts, currencies: [EUR]) {\\n    code\\n    formattedAmounts\\n  }\\n}\\n\",\r\n    \"variables\": {\r\n        \"amounts\": [\r\n            7500,\r\n            13500\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://dashboard.cypress.io/graphql"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Github",
+			"item": [
+				{
+					"name": "Consulta do endereço github",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Requisição efetuada com sucesso\", () => {\r",
+									"  pm.expect(pm.response.code).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Json deve possuir o valor https://github.com/cypress-io\", () => {\r",
+									"  pm.expect(pm.response.json().owner.html_url).to.eql(\"https://github.com/cypress-io\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Json deve possuir o valor https://api.github.com/users/cypress-io\", () => {\r",
+									"  pm.expect(pm.response.json().organization.url).to.eql(\"https://api.github.com/users/cypress-io\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://api.github.com/repos/cypress-io/cypress"
+					},
+					"response": []
+				},
+				{
+					"name": "https://api.github.com/users/cypress-io",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "https://api.github.com/users/cypress-io"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
